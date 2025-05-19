@@ -89,8 +89,8 @@ function Register() {
         }
         break;
       case 'email':
-        if (value && !value.endsWith('@infosys.com')) {
-          error = 'Please use your Infosys email address (@infosys.com)';
+        if (value && !value.endsWith('@gmail.com')) {
+          error = 'Please use valid email address ';
         }
         break;
       case 'password':
@@ -264,7 +264,7 @@ function Register() {
                   placeholder="Enter your Infosys email"
                   value={email}
                   onChange={onChange}
-                  pattern="[a-z0-9._%+-]+@infosys\.com$"
+                  pattern="[a-z0-9._%+-]+@gmail\.com$"
                 />
               </div>
               {validationErrors.email && (

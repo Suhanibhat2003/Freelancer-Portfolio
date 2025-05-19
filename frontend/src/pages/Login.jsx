@@ -65,8 +65,8 @@ function Login() {
       return;
     }
 
-    if (!email.endsWith('@infosys.com')) {
-      toast.error('Please use your Infosys email address (@infosys.com)');
+    if (!email.endsWith('@gmail.com')) {
+      toast.error('Please use valid email address');
       return;
     }
 
@@ -124,8 +124,8 @@ function Login() {
       return;
     }
 
-    if (!email.endsWith('@infosys.com')) {
-      toast.error('Please use your Infosys email address (@infosys.com)');
+    if (!email.endsWith('@gmail.com')) {
+      toast.error('Please use valid email address');
       return;
     }
 

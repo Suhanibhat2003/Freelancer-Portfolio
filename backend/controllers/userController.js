@@ -1,12 +1,12 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const asyncHandler = require('express-async-handler');
-const User = require('../models/userModel');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/userModel");
 
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: "30d",
   });
 };
 
@@ -18,20 +18,21 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (!name || !username || !email || !password) {
     res.status(400);
-    throw new Error('Please add all fields');
+    throw new Error("Please add all fields");
   }
 
   // Check if user exists
-  const userExists = await User.findOne({ 
-    $or: [
-      { email },
-      { username }
-    ]
+  const userExists = await User.findOne({
+    $or: [{ email }, { username }],
   });
 
   if (userExists) {
     res.status(400);
-    throw new Error(userExists.email === email ? 'Email already exists' : 'Username already taken');
+    throw new Error(
+      userExists.email === email
+        ? "Email already exists"
+        : "Username already taken"
+    );
   }
 
   // Hash password
@@ -56,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error("Invalid user data");
   }
 });
 
@@ -79,7 +80,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid credentials');
+    throw new Error("Invalid credentials");
   }
 });
 
@@ -87,7 +88,7 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/me
 // @access  Private
 const getMe = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
+  const user = await User.findById(req.user.id).select("-password");
   res.status(200).json(user);
 });
 
@@ -107,7 +108,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -124,7 +125,7 @@ const updateAvatar = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -141,7 +142,7 @@ const updateSocialLinks = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -158,7 +159,7 @@ const updateSkills = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -175,7 +176,7 @@ const uploadResume = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -188,30 +189,30 @@ const resetPassword = asyncHandler(async (req, res) => {
   // Validate input
   if (!email || !newPassword) {
     res.status(400);
-    throw new Error('Please provide both email and new password');
+    throw new Error("Please provide both email and new password");
   }
 
   // Validate email format
-  if (!email.endsWith('@infosys.com')) {
+  if (!email.endsWith("@gmail.com")) {
     res.status(400);
-    throw new Error('Please use your Infosys email address');
+    throw new Error("Please use valid email address");
   }
 
   // Validate password length
   if (newPassword.length < 6) {
     res.status(400);
-    throw new Error('Password must be at least 6 characters long');
+    throw new Error("Password must be at least 6 characters long");
   }
 
-  console.log('Attempting to find user with email:', email); // Debug log
+  console.log("Attempting to find user with email:", email); // Debug log
 
   // Check if user exists
   const user = await User.findOne({ email });
 
   if (!user) {
-    console.log('No user found with email:', email); // Debug log
+    console.log("No user found with email:", email); // Debug log
     res.status(404);
-    throw new Error('User not found with this email');
+    throw new Error("User not found with this email");
   }
 
   try {
@@ -221,26 +222,26 @@ const resetPassword = asyncHandler(async (req, res) => {
 
     // Update password
     user.password = hashedPassword;
-    
+
     // Save and verify the update
     const savedUser = await user.save();
     if (!savedUser || savedUser.password !== hashedPassword) {
-      console.error('Password update verification failed'); // Debug log
+      console.error("Password update verification failed"); // Debug log
       res.status(500);
-      throw new Error('Failed to update password. Please try again.');
+      throw new Error("Failed to update password. Please try again.");
     }
 
-    console.log('Password successfully reset for user:', email); // Debug log
+    console.log("Password successfully reset for user:", email); // Debug log
 
     // Return success with user ID for verification
-    res.status(200).json({ 
-      message: 'Password reset successful',
-      userId: user._id 
+    res.status(200).json({
+      message: "Password reset successful",
+      userId: user._id,
     });
   } catch (error) {
-    console.error('Error during password reset:', error); // Debug log
+    console.error("Error during password reset:", error); // Debug log
     res.status(500);
-    throw new Error('Failed to reset password. Please try again.');
+    throw new Error("Failed to reset password. Please try again.");
   }
 });
 
@@ -254,4 +255,4 @@ module.exports = {
   updateSkills,
   uploadResume,
   resetPassword,
-}; 
+};
