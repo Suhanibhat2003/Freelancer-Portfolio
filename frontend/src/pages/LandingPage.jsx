@@ -1,8 +1,24 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaBriefcase, FaPalette, FaChartLine, FaLock } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaBriefcase, FaPalette, FaChartLine } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function LandingPage() {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/reviews');
+        setReviews(response.data);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+    fetchReviews();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       {/* Hero Section */}
@@ -89,21 +105,13 @@ function LandingPage() {
             </p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Testimonial
-              quote="This platform helped me land my biggest client yet. The portfolio design is simply stunning!"
-              author="Sarah Johnson"
-              role="UI/UX Designer"
-            />
-            <Testimonial
-              quote="Easy to use and highly customizable. I love how professional my portfolio looks now."
-              author="Michael Chen"
-              role="Full Stack Developer"
-            />
-            <Testimonial
-              quote="The best investment I've made for my freelance business. Clients love my portfolio!"
-              author="Emma Williams"
-              role="Content Writer"
-            />
+            {reviews.map((review) => (
+              <Testimonial
+                key={review._id}
+                quote={review.quote}
+                author={review.user.name}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -182,7 +190,7 @@ function Feature({ icon, title, description }) {
 }
 
 // Testimonial Component
-function Testimonial({ quote, author, role }) {
+function Testimonial({ quote, author }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -194,7 +202,6 @@ function Testimonial({ quote, author, role }) {
       <p className="text-gray-600 mb-4 italic">"{quote}"</p>
       <div>
         <p className="font-semibold text-gray-900">{author}</p>
-        <p className="text-gray-500 text-sm">{role}</p>
       </div>
     </motion.div>
   );

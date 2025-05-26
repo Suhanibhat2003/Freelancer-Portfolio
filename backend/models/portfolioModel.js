@@ -22,22 +22,38 @@ const experienceSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
+    minlength: 2
   },
   company: {
     type: String,
     required: true,
+    minlength: 2
   },
-  location: String,
+  location: {
+    type: String,
+    maxlength: 100
+  },
   startDate: {
     type: Date,
-    required: true,
+    required: true
   },
-  endDate: Date,
+  endDate: {
+    type: Date,
+    validate: {
+      validator: function(value) {
+        return !value || !this.startDate || value >= this.startDate;
+      },
+      message: 'End date must be after start date.'
+    }
+  },
   current: {
     type: Boolean,
-    default: false,
+    default: false
   },
-  description: String,
+  description: {
+    type: String,
+    maxlength: 500
+  },
   responsibilities: [String],
   technologies: [String]
 });
@@ -46,19 +62,41 @@ const certificationSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
+    minlength: 2
   },
   issuer: {
     type: String,
     required: true,
+    minlength: 2
   },
   issueDate: {
     type: Date,
-    required: true,
+    required: true
   },
-  expiryDate: Date,
+  expiryDate: {
+    type: Date,
+    validate: {
+      validator: function(value) {
+        return !value || !this.issueDate || value >= this.issueDate;
+      },
+      message: 'Expiry date must be after issue date.'
+    }
+  },
   credentialID: String,
-  credentialURL: String,
-  description: String
+  credentialURL: {
+    type: String,
+    validate: {
+      validator: function(value) {
+        if (!value) return true;
+        try { new URL(value); return true; } catch { return false; }
+      },
+      message: 'Invalid URL.'
+    }
+  },
+  description: {
+    type: String,
+    maxlength: 500
+  }
 });
 
 const portfolioSchema = mongoose.Schema(
@@ -128,11 +166,45 @@ const portfolioSchema = mongoose.Schema(
     experience: [experienceSchema],
     certifications: [certificationSchema],
     contact: {
-      email: String,
-      linkedin: String,
-      github: String,
-      phone: String,
-      location: String
+      email: {
+        type: String,
+        required: true,
+        match: [/\S+@\S+\.\S+/, 'Valid email required']
+      },
+      linkedin: {
+        type: String,
+        validate: {
+          validator: function(value) {
+            if (!value) return true;
+            try { new URL(value); return true; } catch { return false; }
+          },
+          message: 'Invalid URL.'
+        }
+      },
+      github: {
+        type: String,
+        validate: {
+          validator: function(value) {
+            if (!value) return true;
+            try { new URL(value); return true; } catch { return false; }
+          },
+          message: 'Invalid URL.'
+        }
+      },
+      phone: {
+        type: String,
+        validate: {
+          validator: function(value) {
+            if (!value) return true;
+            return /^\d{10}$/.test(value);
+          },
+          message: 'Phone must be exactly 10 digits.'
+        }
+      },
+      location: {
+        type: String,
+        maxlength: 100
+      }
     },
     theme: {
       type: String,

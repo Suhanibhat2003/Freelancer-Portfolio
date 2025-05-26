@@ -152,54 +152,7 @@ function Dashboard() {
       </section>
 
       {/* Recent Projects Section */}
-      {projects.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">Recent Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.slice(0, 3).map((project) => (
-              <div key={project._id} className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-semibold mb-2">{project.title}</h3>
-                <p className="text-gray-600 mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 text-sm rounded"
-                      style={{ backgroundColor: '#F5F3FF', color: '#4F3B78' }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-4">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline transition duration-300"
-                      style={{ color: '#4F3B78' }}
-                    >
-                      GitHub
-                    </a>
-                  )}
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline transition duration-300"
-                      style={{ color: '#4F3B78' }}
-                    >
-                      Live Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Removed Recent Projects section as requested */}
     </div>
   );
 }

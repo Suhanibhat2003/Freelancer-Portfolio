@@ -83,6 +83,50 @@ function PortfolioEditor() {
   const { portfolio, isLoading: portfolioLoading } = useSelector((state) => state.portfolio);
   const { projects, isLoading: projectsLoading } = useSelector((state) => state.projects);
 
+  // Add validation state for Experience, Certifications, and Contact
+  const [experienceErrors, setExperienceErrors] = useState({});
+  const [certificationErrors, setCertificationErrors] = useState({});
+  const [contactErrors, setContactErrors] = useState({});
+
+  // Validation helpers
+  const isValidUrl = (url) => {
+    try { new URL(url); return true; } catch { return false; }
+  };
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const isValidPhone = (phone) => /^\+?[0-9\-\s]{7,15}$/.test(phone);
+
+  // Experience validation
+  const validateExperience = (exp) => {
+    const errors = {};
+    if (!exp.title || exp.title.length < 2) errors.title = 'Title is required (min 2 chars)';
+    if (!exp.company || exp.company.length < 2) errors.company = 'Company is required (min 2 chars)';
+    if (!exp.startDate) errors.startDate = 'Start date is required';
+    if (exp.endDate && exp.startDate && new Date(exp.endDate) < new Date(exp.startDate)) errors.endDate = 'End date must be after start date';
+    if (exp.description && exp.description.length > 500) errors.description = 'Description max 500 chars';
+    return errors;
+  };
+  // Certification validation
+  const validateCertification = (cert) => {
+    const errors = {};
+    if (!cert.name || cert.name.length < 2) errors.name = 'Name is required (min 2 chars)';
+    if (!cert.issuer || cert.issuer.length < 2) errors.issuer = 'Issuer is required (min 2 chars)';
+    if (!cert.issueDate) errors.issueDate = 'Issue date is required';
+    if (cert.expiryDate && cert.issueDate && new Date(cert.expiryDate) < new Date(cert.issueDate)) errors.expiryDate = 'Expiry must be after issue date';
+    if (cert.credentialURL && cert.credentialURL.length > 0 && !isValidUrl(cert.credentialURL)) errors.credentialURL = 'Invalid URL';
+    if (cert.description && cert.description.length > 500) errors.description = 'Description max 500 chars';
+    return errors;
+  };
+  // Contact validation
+  const validateContact = (contact) => {
+    const errors = {};
+    if (!contact.email || !isValidEmail(contact.email)) errors.email = 'Valid email required';
+    if (contact.linkedin && contact.linkedin.length > 0 && !isValidUrl(contact.linkedin)) errors.linkedin = 'Invalid URL';
+    if (contact.github && contact.github.length > 0 && !isValidUrl(contact.github)) errors.github = 'Invalid URL';
+    if (contact.phone && contact.phone.length > 0 && !/^\d{10}$/.test(contact.phone)) errors.phone = 'Phone must be exactly 10 digits';
+    if (contact.location && contact.location.length > 100) errors.location = 'Location max 100 chars';
+    return errors;
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -176,6 +220,12 @@ function PortfolioEditor() {
 
   const addExperience = (e) => {
     e.preventDefault();
+    const errors = validateExperience(newExperience);
+    setExperienceErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      toast.error('Please fix experience errors');
+      return;
+    }
     const responsibilities = newExperience.responsibilities.split('\n').filter(r => r.trim());
     const technologies = newExperience.technologies.split(',').map(t => t.trim()).filter(t => t);
     
@@ -215,6 +265,12 @@ function PortfolioEditor() {
 
   const addCertification = (e) => {
     e.preventDefault();
+    const errors = validateCertification(newCertification);
+    setCertificationErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      toast.error('Please fix certification errors');
+      return;
+    }
     setFormData(prev => ({
       ...prev,
       certifications: [...prev.certifications, newCertification]
@@ -239,6 +295,11 @@ function PortfolioEditor() {
       certifications: prev.certifications.filter((_, i) => i !== index)
     }));
     toast.success('Certification removed successfully');
+  };
+
+  const handleContactChange = (field, value) => {
+    handleChange('contact', field, value);
+    setContactErrors(validateContact({ ...formData.contact, [field]: value }));
   };
 
   const handleSave = async () => {
@@ -590,6 +651,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
+                    {experienceErrors.title && <p className="text-red-500 text-xs">{experienceErrors.title}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -603,6 +665,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
+                    {experienceErrors.company && <p className="text-red-500 text-xs">{experienceErrors.company}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -628,6 +691,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
+                    {experienceErrors.startDate && <p className="text-red-500 text-xs">{experienceErrors.startDate}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -641,6 +705,7 @@ function PortfolioEditor() {
                       disabled={newExperience.current}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                     />
+                    {experienceErrors.endDate && <p className="text-red-500 text-xs">{experienceErrors.endDate}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -666,6 +731,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       placeholder="Enter a description of your experience"
                     />
+                    {experienceErrors.description && <p className="text-red-500 text-xs">{experienceErrors.description}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -748,6 +814,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
+                    {certificationErrors.name && <p className="text-red-500 text-xs">{certificationErrors.name}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -761,6 +828,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
+                    {certificationErrors.issuer && <p className="text-red-500 text-xs">{certificationErrors.issuer}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -774,6 +842,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
+                    {certificationErrors.issueDate && <p className="text-red-500 text-xs">{certificationErrors.issueDate}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -786,6 +855,7 @@ function PortfolioEditor() {
                       onChange={handleCertificationChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                     />
+                    {certificationErrors.expiryDate && <p className="text-red-500 text-xs">{certificationErrors.expiryDate}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -811,6 +881,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       placeholder="Enter the URL of your credential"
                     />
+                    {certificationErrors.credentialURL && <p className="text-red-500 text-xs">{certificationErrors.credentialURL}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -824,6 +895,7 @@ function PortfolioEditor() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                       placeholder="Enter a description of your certification"
                     />
+                    {certificationErrors.description && <p className="text-red-500 text-xs">{certificationErrors.description}</p>}
                   </div>
                 </div>
                 <button
@@ -873,10 +945,11 @@ function PortfolioEditor() {
                 <input
                   type="email"
                   value={formData.contact.email}
-                  onChange={(e) => handleChange('contact', 'email', e.target.value)}
+                  onChange={(e) => handleContactChange('email', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                     required
                 />
+                {contactErrors.email && <p className="text-red-500 text-xs">{contactErrors.email}</p>}
               </div>
               <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -885,9 +958,10 @@ function PortfolioEditor() {
                 <input
                   type="text"
                   value={formData.contact.linkedin}
-                  onChange={(e) => handleChange('contact', 'linkedin', e.target.value)}
+                  onChange={(e) => handleContactChange('linkedin', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 />
+                {contactErrors.linkedin && <p className="text-red-500 text-xs">{contactErrors.linkedin}</p>}
               </div>
               <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -896,9 +970,10 @@ function PortfolioEditor() {
                 <input
                   type="text"
                   value={formData.contact.github}
-                  onChange={(e) => handleChange('contact', 'github', e.target.value)}
+                  onChange={(e) => handleContactChange('github', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                   />
+                  {contactErrors.github && <p className="text-red-500 text-xs">{contactErrors.github}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -907,9 +982,10 @@ function PortfolioEditor() {
                   <input
                     type="text"
                     value={formData.contact.phone}
-                    onChange={(e) => handleChange('contact', 'phone', e.target.value)}
+                    onChange={(e) => handleContactChange('phone', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                   />
+                  {contactErrors.phone && <p className="text-red-500 text-xs">{contactErrors.phone}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -918,9 +994,10 @@ function PortfolioEditor() {
                   <input
                     type="text"
                     value={formData.contact.location}
-                    onChange={(e) => handleChange('contact', 'location', e.target.value)}
+                    onChange={(e) => handleContactChange('location', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 />
+                {contactErrors.location && <p className="text-red-500 text-xs">{contactErrors.location}</p>}
               </div>
             </div>
           </section>

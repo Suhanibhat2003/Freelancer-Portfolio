@@ -314,13 +314,15 @@ function LivePreview() {
         )}
 
         {/* Certifications Section */}
-        {certifications && certifications.length > 0 && (
-          <section className={spacing}>
-            <div className="container mx-auto px-4">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center" style={{ color: customization?.primaryColor || '#4F3B78' }}>
-                  Certifications
-                </h2>
+        <section className={spacing}>
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center" style={{ color: customization?.primaryColor || '#4F3B78' }}>
+                Certifications
+              </h2>
+              {(!certifications || certifications.length === 0) ? (
+                <p className="text-center text-gray-500">No certifications added yet.</p>
+              ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {certifications.map((cert, index) => (
                     <div key={index} className="bg-white rounded-lg shadow-lg p-6">
@@ -329,7 +331,7 @@ function LivePreview() {
                       </h3>
                       <p className="text-gray-600 mb-4">{cert.issuer}</p>
                       <p className="text-sm text-gray-500 mb-4">
-                        Issued: {new Date(cert.issueDate).toLocaleDateString()}
+                        Issued: {cert.issueDate ? new Date(cert.issueDate).toLocaleDateString() : 'N/A'}
                         {cert.expiryDate && ` - Expires: ${new Date(cert.expiryDate).toLocaleDateString()}`}
                       </p>
                       {cert.description && (
@@ -349,10 +351,10 @@ function LivePreview() {
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
         {/* Projects Section */}
         <section 

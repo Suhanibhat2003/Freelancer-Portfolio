@@ -1,5 +1,5 @@
-const asyncHandler = require('express-async-handler');
-const Project = require('../models/projectModel');
+const asyncHandler = require("express-async-handler");
+const Project = require("../models/projectModel");
 
 // @desc    Get user's projects
 // @route   GET /api/projects
@@ -17,13 +17,13 @@ const getProject = asyncHandler(async (req, res) => {
 
   if (!project) {
     res.status(404);
-    throw new Error('Project not found');
+    throw new Error("Project not found");
   }
 
   // Check if user owns the project
   if (project.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 
   res.status(200).json(project);
@@ -37,7 +37,7 @@ const createProject = asyncHandler(async (req, res) => {
 
   if (!title || !description) {
     res.status(400);
-    throw new Error('Please add title and description');
+    throw new Error("Please add title and description");
   }
 
   const project = await Project.create({
@@ -60,13 +60,13 @@ const updateProject = asyncHandler(async (req, res) => {
 
   if (!project) {
     res.status(404);
-    throw new Error('Project not found');
+    throw new Error("Project not found");
   }
 
   // Check if user owns the project
   if (project.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 
   const updatedProject = await Project.findByIdAndUpdate(
@@ -86,13 +86,13 @@ const deleteProject = asyncHandler(async (req, res) => {
 
   if (!project) {
     res.status(404);
-    throw new Error('Project not found');
+    throw new Error("Project not found");
   }
 
   // Check if user owns the project
   if (project.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 
   await Project.findByIdAndDelete(req.params.id);
@@ -107,20 +107,20 @@ const uploadProjectImages = asyncHandler(async (req, res) => {
 
   if (!project) {
     res.status(404);
-    throw new Error('Project not found');
+    throw new Error("Project not found");
   }
 
   // Check if user owns the project
   if (project.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 
   const { images } = req.body;
 
   if (!images || !Array.isArray(images)) {
     res.status(400);
-    throw new Error('Please provide images array');
+    throw new Error("Please provide images array");
   }
 
   project.images = [...project.images, ...images];
@@ -137,13 +137,13 @@ const deleteProjectImage = asyncHandler(async (req, res) => {
 
   if (!project) {
     res.status(404);
-    throw new Error('Project not found');
+    throw new Error("Project not found");
   }
 
   // Check if user owns the project
   if (project.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('Not authorized');
+    throw new Error("Not authorized");
   }
 
   project.images = project.images.filter(
@@ -162,4 +162,4 @@ module.exports = {
   deleteProject,
   uploadProjectImages,
   deleteProjectImage,
-}; 
+};

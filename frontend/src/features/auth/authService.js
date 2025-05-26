@@ -12,6 +12,9 @@ const register = async (userData) => {
       throw new Error('Username not found in registration response');
     }
     localStorage.setItem('user', JSON.stringify(response.data));
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token); // <-- Save token directly
+    }
   }
 
   return response.data;
@@ -27,6 +30,9 @@ const login = async (userData) => {
       throw new Error('Username not found in login response');
     }
     localStorage.setItem('user', JSON.stringify(response.data));
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token); // <-- Save token directly
+    }
   }
 
   return response.data;
@@ -35,6 +41,7 @@ const login = async (userData) => {
 // Logout user
 const logout = () => {
   localStorage.removeItem('user');
+  localStorage.removeItem('token'); // <-- Remove token on logout
   localStorage.clear(); // Clear all localStorage data
   sessionStorage.clear(); // Clear all sessionStorage data
 };
