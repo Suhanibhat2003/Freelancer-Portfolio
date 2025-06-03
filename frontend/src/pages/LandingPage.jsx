@@ -67,22 +67,46 @@ function LandingPage() {
           >
             Everything You Need to Succeed
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Feature
-              icon={<FaBriefcase className="w-6 h-6" />}
-              title="Project Showcase"
-              description="Display your best work with beautiful project cards and detailed descriptions."
-            />
-            <Feature
-              icon={<FaPalette className="w-6 h-6" />}
-              title="Customizable Design"
-              description="Choose from multiple themes and customize colors to match your personal brand."
-            />
-            <Feature
-              icon={<FaChartLine className="w-6 h-6" />}
-              title="Analytics"
-              description="Track portfolio views and engagement to optimize your online presence."
-            />
+          <div className="flex flex-col gap-12">
+            {/* 1st Card: Card left, Image right */}
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-full md:w-1/2">
+                <Feature
+                  icon={<FaBriefcase className="w-6 h-6" />}
+                  title="Project Showcase"
+                  description="Display your best work with beautiful project cards and detailed descriptions."
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex justify-center">
+                <img src="/images/L1.jpg" alt="Showcase" className="rounded-2xl shadow-lg max-h-72 object-cover" />
+              </div>
+            </div>
+            {/* 2nd Card: Image left, Card right */}
+            <div className="flex flex-col md:flex-row-reverse items-center gap-8">
+              <div className="w-full md:w-1/2">
+                <Feature
+                  icon={<FaPalette className="w-6 h-6" />}
+                  title="Customizable Design"
+                  description="Choose from multiple themes and customize colors to match your personal brand."
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex justify-center">
+                <img src="/images/L2.jpg" alt="Customizable Design" className="rounded-2xl shadow-lg max-h-72 object-cover" />
+              </div>
+            </div>
+            {/* 3rd Card: Card left, Image right */}
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-full md:w-1/2">
+                <Feature
+                  icon={<FaChartLine className="w-6 h-6" />}
+                  title="Analytics"
+                  description="Track portfolio views and engagement to optimize your online presence."
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex justify-center">
+                <img src="/images/L3.jpg" alt="Analytics" className="rounded-2xl shadow-lg max-h-72 object-cover" />
+              </div>
+            </div>
           </div>
         </div>
       </section>

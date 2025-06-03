@@ -151,23 +151,21 @@ function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="px-8 pt-8 pb-6">
-          <div className="flex justify-center">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+        {/* Left: Login Form */}
+        <div className="w-full md:w-1/2 flex flex-col justify-center p-8">
+          <div className="flex justify-center mb-4">
             <FaUserCircle className="h-16 w-16" style={{ color: '#4F3B78' }} />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-2">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-gray-600 mb-6">
             Or{' '}
             <Link to="/register" className="font-medium hover:text-purple-500 transition duration-300" style={{ color: '#4F3B78' }}>
               create a new account
             </Link>
           </p>
-        </div>
-
-        <div className="px-8 pb-8">
           <form className="space-y-6" onSubmit={onSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -245,6 +243,15 @@ function Login() {
               </button>
             </div>
           </form>
+        </div>
+        {/* Right: Image */}
+        <div className="hidden md:block md:w-1/2 bg-gradient-to-tr from-purple-200 via-pink-200 to-blue-200 relative">
+          <img
+            src="/images/Login.jpg"
+            alt="Login Visual"
+            className="object-cover w-full h-full rounded-r-2xl"
+            style={{ minHeight: '100%', minWidth: '100%' }}
+          />
         </div>
       </div>
 

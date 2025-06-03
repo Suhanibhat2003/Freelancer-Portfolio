@@ -41,13 +41,6 @@ function Header() {
                   Dashboard
                 </Link>
                 <Link
-                  to="/portfolio"
-                  className="hover:text-purple-200"
-                  style={{ color: '#e0d7f7' }}
-                >
-                  Portfolio
-                </Link>
-                <Link
                   to="/projects"
                   className="hover:text-purple-200"
                   style={{ color: '#e0d7f7' }}
@@ -59,7 +52,7 @@ function Header() {
                   className="hover:text-purple-200"
                   style={{ color: '#e0d7f7' }}
                 >
-                  Write Review
+                  Review
                 </button>
                 <button
                   onClick={onLogout}

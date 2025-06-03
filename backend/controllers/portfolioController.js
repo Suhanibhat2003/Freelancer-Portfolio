@@ -24,15 +24,16 @@ const getPublicPortfolio = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username: req.params.username });
 
   if (!user) {
-    res.status(404);
-    throw new Error('User not found');
+    // Always return both keys for consistency
+    return res.status(200).json({ portfolio: null, projects: [] });
   }
 
   const portfolio = await Portfolio.findOne({ user: user._id }).populate('user', 'name username');
+  const projects = await Project.find({ user: user._id });
 
   if (!portfolio) {
-    res.status(404);
-    throw new Error('Portfolio not found');
+    // Always return both keys for consistency
+    return res.status(200).json({ portfolio: null, projects });
   }
 
   if (!portfolio.isPublic) {
@@ -43,9 +44,6 @@ const getPublicPortfolio = asyncHandler(async (req, res) => {
   // Increment views
   portfolio.views += 1;
   await portfolio.save();
-
-  // Get user's projects
-  const projects = await Project.find({ user: user._id });
 
   res.status(200).json({
     portfolio,
