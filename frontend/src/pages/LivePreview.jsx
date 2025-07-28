@@ -31,17 +31,31 @@ function LivePreview() {
           if (username) {
             try {
               await axios.post('http://localhost:5000/api/portfolios', {
-                template: 'dark',
+                template: 'minimal',
                 isPublic: true,
-                hero: { title: 'Dark Portfolio', subtitle: 'Experience. Knowledge. Trust.' },
+                hero: { 
+                  title: 'Welcome to My Portfolio', 
+                  subtitle: 'Full Stack Developer',
+                  background: {
+                    type: 'color',
+                    color: '#ffffff'
+                  },
+                  ctaText: 'View My Work'
+                },
                 about: { title: 'About Me', bio: '', skills: [], image: '' },
                 experience: [],
                 certifications: [],
                 contact: { email: '', linkedin: '', github: '', phone: '', location: '' },
-                customization: { primaryColor: '#fff', secondaryColor: '#a0aec0', fontFamily: 'Inter', layout: 'dark', spacing: 'compact' },
-                theme: 'dark',
+                customization: { 
+                  primaryColor: '#4CAF50', 
+                  secondaryColor: '#2E7D32', 
+                  fontFamily: 'Inter', 
+                  layout: 'minimal', 
+                  spacing: 'comfortable' 
+                },
+                theme: 'light',
               }, { withCredentials: true });
-              toast.success('Default dark portfolio created. Please refresh.');
+              toast.success('Default minimal portfolio created. Please refresh.');
               window.location.reload();
               return;
             } catch (createErr) {

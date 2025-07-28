@@ -89,8 +89,8 @@ function Register() {
         }
         break;
       case 'email':
-        if (value && !value.endsWith('@gmail.com')) {
-          error = 'Please use valid email address ';
+        if (value && !/@gmail\.com$/.test(value)) {
+          error = 'Please use valid Gmail address (must end with @gmail.com)';
         }
         break;
       case 'password':
@@ -261,7 +261,7 @@ function Register() {
                   className={`appearance-none rounded-lg relative block w-full pl-10 px-3 py-2 border ${
                     validationErrors.email ? 'border-red-500' : 'border-gray-300'
                   } placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm`}
-                  placeholder="Enter your Infosys email"
+                  placeholder="Enter your Gmail address"
                   value={email}
                   onChange={onChange}
                   pattern="[a-z0-9._%+-]+@gmail\.com$"

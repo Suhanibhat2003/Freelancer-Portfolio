@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaBriefcase, FaPalette, FaChartLine } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function LandingPage() {
   const [reviews, setReviews] = useState([]);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -18,6 +20,20 @@ function LandingPage() {
     };
     fetchReviews();
   }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:5000/api/reviews/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Re-fetch reviews to ensure UI updates
+      const response = await axios.get('http://localhost:5000/api/reviews');
+      setReviews(response.data);
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to delete review');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -99,8 +115,8 @@ function LandingPage() {
               <div className="w-full md:w-1/2">
                 <Feature
                   icon={<FaChartLine className="w-6 h-6" />}
-                  title="Analytics"
-                  description="Track portfolio views and engagement to optimize your online presence."
+                  title="Live Preview"
+                  description="Live preview to explore portfolio in action and see how your freelance identity can come to life."
                 />
               </div>
               <div className="w-full md:w-1/2 flex justify-center">
@@ -134,6 +150,8 @@ function LandingPage() {
                 key={review._id}
                 quote={review.quote}
                 author={review.user.name}
+                canDelete={user && review.user && user._id === review.user._id}
+                onDelete={() => handleDelete(review._id)}
               />
             ))}
           </div>
@@ -214,18 +232,28 @@ function Feature({ icon, title, description }) {
 }
 
 // Testimonial Component
-function Testimonial({ quote, author }) {
+function Testimonial({ quote, author, canDelete, onDelete }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="bg-white p-6 rounded-xl shadow-lg"
+      className="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-between min-h-[220px]"
     >
-      <p className="text-gray-600 mb-4 italic">"{quote}"</p>
       <div>
+        <p className="text-gray-600 mb-4 italic">"{quote}"</p>
+      </div>
+      <div className="flex items-center gap-4 mt-6">
         <p className="font-semibold text-gray-900">{author}</p>
+        {canDelete && (
+          <span
+            className="ml-2 cursor-pointer underline text-red-600 hover:text-red-800 text-sm"
+            onClick={onDelete}
+          >
+            Delete
+          </span>
+        )}
       </div>
     </motion.div>
   );

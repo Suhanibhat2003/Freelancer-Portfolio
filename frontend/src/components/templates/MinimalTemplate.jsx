@@ -47,8 +47,8 @@ function MinimalTemplate({ portfolio, projects }) {
             <div className="absolute inset-0 bg-white" />
             <div className="relative z-10 max-w-5xl mx-auto px-4">
               <div className="w-full max-w-3xl mx-auto p-8 rounded-2xl shadow-xl border border-gray-200" style={{ background: accentGradient }}>
-                <h2 className="text-2xl font-bold mb-4 text-center text-white">{about.title || 'About Me'}</h2>
-                <p className="mb-4 text-white/90 text-center">{about.bio}</p>
+                <h2 className="text-2xl font-bold mb-4 text-center text-black">{about.title || 'About Me'}</h2>
+                <p className="mb-4 text-black/90 text-center">{about.bio}</p>
                 {about.skills && about.skills.length > 0 && (
                   <div className="flex flex-wrap gap-2 justify-center mt-4">
                     {about.skills.map((skill, idx) => (
@@ -64,7 +64,7 @@ function MinimalTemplate({ portfolio, projects }) {
           <section ref={projectsRef} className={`${spacing} relative`}>
             <div className="absolute inset-0 bg-gray-50" />
             <div className="relative z-10 max-w-5xl mx-auto px-4">
-              <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: customization.primaryColor }}>Projects</h2>
+              <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#222' }}>Projects</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {projects.map((project, idx) => (
                   <div key={project._id} className={`relative rounded-2xl shadow-xl border border-gray-200 p-6 overflow-hidden ${pastelBox}`}>
@@ -72,11 +72,11 @@ function MinimalTemplate({ portfolio, projects }) {
                     <div className="relative z-10 flex flex-col md:flex-row gap-4 items-center">
                       {project.image && <img src={project.image} alt={project.title} className="w-24 h-24 object-cover rounded-xl shadow-lg" />}
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold mb-1" style={{ color: customization.primaryColor }}>{project.title}</h3>
+                        <h3 className="text-lg font-semibold mb-1" style={{ color: '#222'}}>{project.title}</h3>
                         <p className="text-gray-600 mb-2">{project.description}</p>
                         <div className="flex gap-4 mt-2">
-                          {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium underline" style={{ color: customization.primaryColor }}>GitHub</a>}
-                          {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium underline" style={{ color: customization.primaryColor }}>Live Demo</a>}
+                          {project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium underline" style={{ color: '#222' }}>GitHub</a>}
+                          {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium underline" style={{ color: '#222'}}>Live Demo</a>}
                         </div>
                       </div>
                     </div>
@@ -91,12 +91,12 @@ function MinimalTemplate({ portfolio, projects }) {
             <section className={`${spacing} relative`}>
               <div className="absolute inset-0 bg-white" />
               <div className="relative z-10 max-w-5xl mx-auto px-4">
-                <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: customization.primaryColor }}>Experience</h2>
+                <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#222' }}>Experience</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {experience.map((exp, idx) => (
                     <div key={idx} className={`relative rounded-2xl shadow-xl border border-gray-200 p-6 overflow-hidden ${pastelBox}`}>
                       <div className="absolute top-0 right-0 w-24 h-24 opacity-20 z-0" style={{ background: pastelGradient, borderRadius: '0 0 0 80px' }} />
-                      <h3 className="text-lg font-semibold mb-1" style={{ color: customization.primaryColor }}>{exp.title}</h3>
+                      <h3 className="text-lg font-semibold mb-1" style={{ color: '#222' }}>{exp.title}</h3>
                       <p className="text-gray-600 mb-1">{exp.company} {exp.location && <>| {exp.location}</>}</p>
                       <p className="text-sm text-gray-500 mb-2">
                         {exp.startDate ? new Date(exp.startDate).toLocaleDateString() : ''} -
@@ -106,7 +106,7 @@ function MinimalTemplate({ portfolio, projects }) {
                       {exp.technologies && exp.technologies.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
                           {exp.technologies.map((tech, i) => (
-                            <span key={i} className="px-2 py-1 text-xs rounded-full bg-white/80 border border-gray-200" style={{ color: customization.primaryColor }}>{tech}</span>
+                            <span key={i} className="px-2 py-1 text-xs rounded-full bg-white/80 border border-gray-200 text-black">{tech}</span>
                           ))}
                         </div>
                       )}
@@ -122,12 +122,12 @@ function MinimalTemplate({ portfolio, projects }) {
             <section className={`${spacing} relative`}>
               <div className="absolute inset-0 bg-gray-50" />
               <div className="relative z-10 max-w-5xl mx-auto px-4">
-                <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: customization.primaryColor }}>Certifications</h2>
+                <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#222' }}>Certifications</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {certifications.map((cert, idx) => (
                     <div key={idx} className={`relative rounded-2xl shadow-xl border border-gray-200 p-6 overflow-hidden ${pastelBox}`}>
                       <div className="absolute top-0 right-0 w-24 h-24 opacity-20 z-0" style={{ background: pastelGradient, borderRadius: '0 0 0 80px' }} />
-                      <h3 className="text-lg font-semibold mb-1" style={{ color: customization.primaryColor }}>{cert.name}</h3>
+                      <h3 className="text-lg font-semibold mb-1" style={{ color: '#222' }}>{cert.name}</h3>
                       <p className="text-gray-600 mb-1">{cert.issuer}</p>
                       <p className="text-sm text-gray-500 mb-2">
                         Issued: {cert.issueDate ? new Date(cert.issueDate).toLocaleDateString() : 'N/A'}
@@ -135,7 +135,7 @@ function MinimalTemplate({ portfolio, projects }) {
                       </p>
                       <p className="text-gray-700 mb-2">{cert.description}</p>
                       {cert.credentialURL && (
-                        <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer" className="text-sm underline" style={{ color: customization.primaryColor }}>Verify Credential</a>
+                        <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer" className="text-sm underline" style={{ color: '#222' }}>Verify Credential</a>
                       )}
                     </div>
                   ))}
@@ -150,7 +150,7 @@ function MinimalTemplate({ portfolio, projects }) {
               <div className="absolute inset-0 bg-white" />
               <div className="relative z-10 max-w-5xl mx-auto px-4">
                 <div className="w-full max-w-3xl mx-auto p-8 rounded-2xl shadow-xl border border-gray-200" style={{ background: accentGradient }}>
-                  <h2 className="text-2xl font-bold mb-8 text-center text-white">Get in Touch</h2>
+                  <h2 className="text-2xl font-bold mb-8 text-center text-black">Get in Touch</h2>
                   <div className="flex flex-wrap justify-center gap-8">
                     {contact.email && (
                       <a href={`mailto:${contact.email}`} className="text-lg font-medium hover:underline text-white">Email: {contact.email}</a>

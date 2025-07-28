@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../features/auth/authSlice';
 import { useState } from 'react';
-import { FaRegClone } from 'react-icons/fa';
+import { FaRegClone, FaBars, FaTimes } from 'react-icons/fa';
 import ReviewForm from './ReviewForm';
 
 function Header() {
@@ -10,6 +10,7 @@ function Header() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const onLogout = async () => {
     try {
@@ -29,8 +30,16 @@ function Header() {
             <FaRegClone className="w-7 h-7 text-white" />
             Portfolio Pro
           </Link>
-
-          <div className="flex items-center space-x-4">
+          {/* Hamburger Icon for Mobile */}
+          <button
+            className="md:hidden text-white focus:outline-none ml-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <FaTimes className="w-7 h-7" /> : <FaBars className="w-7 h-7" />}
+          </button>
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
                 <Link
@@ -82,6 +91,64 @@ function Header() {
             )}
           </div>
         </div>
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden flex flex-col space-y-2 mt-4 bg-[#4F3B78] rounded-lg p-4 shadow-lg z-50">
+            {user ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="hover:text-purple-200"
+                  style={{ color: '#e0d7f7' }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/projects"
+                  className="hover:text-purple-200"
+                  style={{ color: '#e0d7f7' }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Projects
+                </Link>
+                <button
+                  onClick={() => { setShowReviewForm(true); setMenuOpen(false); }}
+                  className="hover:text-purple-200 text-left"
+                  style={{ color: '#e0d7f7' }}
+                >
+                  Review
+                </button>
+                <button
+                  onClick={() => { onLogout(); setMenuOpen(false); }}
+                  className="px-4 py-2 rounded hover:bg-purple-900 transition duration-200 text-left"
+                  style={{ backgroundColor: '#a259e6', color: '#fff' }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="hover:text-purple-200"
+                  style={{ color: '#e0d7f7' }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 py-2 rounded hover:bg-purple-900 transition duration-200"
+                  style={{ backgroundColor: '#a259e6', color: '#fff' }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </>
+            )}
+          </div>
+        )}
       </nav>
 
       {/* Review Form Modal */}

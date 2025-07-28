@@ -18,26 +18,15 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add an email'],
       unique: true,
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        'Please add a valid email',
-      ],
+      match: [/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Please add a valid Gmail address (must end with @gmail.com)'],
     },
     password: {
       type: String,
       required: [true, 'Please add a password'],
     },
-    role: {
-      type: String,
-      default: 'Freelancer',
-    },
     bio: {
       type: String,
       maxlength: [500, 'Bio cannot be more than 500 characters'],
-    },
-    avatar: {
-      type: String,
-      default: 'https://www.gravatar.com/avatar/?d=mp',
     },
     socialLinks: {
       linkedin: String,
@@ -53,7 +42,6 @@ const userSchema = mongoose.Schema(
         max: 5,
       },
     }],
-    resumeUrl: String,
   },
   {
     timestamps: true,

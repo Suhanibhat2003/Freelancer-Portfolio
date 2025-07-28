@@ -25,6 +25,23 @@ function ProfessionalTemplate({ portfolio, projects }) {
         <button className="px-8 py-3 rounded-lg font-semibold shadow" style={{ backgroundColor: customization.primaryColor, color: '#fff' }} onClick={handleContactMe}>{hero.ctaText}</button>
       </section>
 
+      {/* About Section */}
+      {(about.title || about.bio || (about.skills && about.skills.length > 0)) && (
+        <section className={`${spacing} bg-white`}> 
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: customization.primaryColor }}>{about.title || 'About Me'}</h2>
+            {about.bio && <p className="text-lg text-gray-700 mb-4 text-center">{about.bio}</p>}
+            {about.skills && about.skills.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center mt-2">
+                {about.skills.map((skill, idx) => (
+                  <span key={idx} className="px-3 py-1 text-sm rounded-full bg-blue-100 border border-blue-200 text-gray-800">{skill}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* Projects Section */}
       <section className={`${spacing} bg-white`}> 
         <div className="max-w-5xl mx-auto px-4">

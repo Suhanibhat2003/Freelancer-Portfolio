@@ -112,22 +112,6 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Update user avatar
-// @route   PUT /api/users/avatar
-// @access  Private
-const updateAvatar = asyncHandler(async (req, res) => {
-  const { avatarUrl } = req.body;
-  const user = await User.findById(req.user.id);
-
-  if (user) {
-    user.avatar = avatarUrl;
-    const updatedUser = await user.save();
-    res.status(200).json(updatedUser);
-  } else {
-    res.status(404);
-    throw new Error("User not found");
-  }
-});
 
 // @desc    Update social links
 // @route   PUT /api/users/social-links
@@ -195,7 +179,7 @@ const resetPassword = asyncHandler(async (req, res) => {
   // Validate email format
   if (!email.endsWith("@gmail.com")) {
     res.status(400);
-    throw new Error("Please use valid email address");
+    throw new Error("Please use valid Gmail address (must end with @gmail.com)");
   }
 
   // Validate password length
@@ -250,7 +234,7 @@ module.exports = {
   loginUser,
   getMe,
   updateProfile,
-  updateAvatar,
+  //updateAvatar,
   updateSocialLinks,
   updateSkills,
   uploadResume,

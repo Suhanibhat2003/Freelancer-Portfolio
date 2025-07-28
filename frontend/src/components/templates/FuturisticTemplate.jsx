@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { FaGithub, FaLinkedin, FaEnvelope, FaGlobe } from 'react-icons/fa';
+import { MdPsychology } from 'react-icons/md';
 
 function FuturisticTemplate({ portfolio, projects }) {
   const { customization = {}, hero = {}, about = {}, contact = {}, experience = [], certifications = [] } = portfolio;
@@ -32,10 +33,10 @@ function FuturisticTemplate({ portfolio, projects }) {
         {/* Pink accent shape */}
         <div className="absolute top-0 left-0 w-full h-1/2 z-0" style={{ background: 'linear-gradient(120deg, #FAA5BB 0%, #FAA5BB 100%)', clipPath: 'ellipse(70% 40% at 50% 0%)' }} />
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center gap-8 text-center py-16">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg">{hero.title}</h1>
-          <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-white/90">{hero.subtitle}</h2>
-          <p className="text-base md:text-lg mb-8 text-white/80 max-w-xl mx-auto">{hero.description}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg mt-10">{hero.title}</h1>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-white/90">{hero.subtitle}</h2>
+          <p className="text-base md:text-lg mb-4 text-white/80 max-w-xl mx-auto">{hero.description}</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
             <button
               onClick={handleViewWork}
               className="px-8 py-3 rounded-lg font-semibold bg-[#FAA5BB] hover:bg-pink-700 text-white shadow-lg transition-all duration-300 mb-2 sm:mb-0"
@@ -49,6 +50,21 @@ function FuturisticTemplate({ portfolio, projects }) {
               Contact Me
             </button>
           </div>
+          {/* Social Links below buttons */}
+          {(contact.linkedin || contact.github) && (
+            <div className="flex gap-6 justify-center mt-6">
+              {contact.github && (
+                <a href={contact.github} target="_blank" rel="noopener noreferrer" className="text-3xl hover:text-[#FAA5BB] transition-colors" title="GitHub">
+                  <FaGithub />
+                </a>
+              )}
+              {contact.linkedin && (
+                <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-3xl hover:text-[#FAA5BB] transition-colors" title="LinkedIn">
+                  <FaLinkedin />
+                </a>
+              )}
+            </div>
+          )}
           {about.image && (
             <div className="flex items-center justify-center mt-8">
               <div className="rounded-full border-8 border-[#FAA5BB] shadow-xl overflow-hidden w-64 h-64 bg-white">
@@ -94,7 +110,7 @@ function FuturisticTemplate({ portfolio, projects }) {
       <section ref={projectsRef} className={`${spacing} bg-black text-white`}>
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center" style={{ color: '#FAA5BB' }}>Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-wrap justify-center gap-8">
             {projects.map((project) => (
               <div
                 key={project._id}
@@ -112,7 +128,7 @@ function FuturisticTemplate({ portfolio, projects }) {
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2 text-white">{project.title}</h3>
                   <p className="text-gray-300 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech, index) => (
                       <span
                         key={index}
@@ -121,6 +137,18 @@ function FuturisticTemplate({ portfolio, projects }) {
                         {tech}
                       </span>
                     ))}
+                  </div>
+                  <div className="flex gap-4">
+                    {project.githubUrl && (
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="text-[#FAA5BB] hover:text-pink-300 transition-colors">
+                        <FaGithub className="text-xl" />
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-[#FAA5BB] hover:text-pink-300 transition-colors">
+                        <FaGlobe className="text-xl" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -188,7 +216,7 @@ function FuturisticTemplate({ portfolio, projects }) {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center" style={{ color: '#FAA5BB' }}>Get in Touch</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className={`grid ${contact.location ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-8 justify-center`}>
               <div className="bg-gray-100 rounded-2xl p-8 border" style={{ borderColor: '#FAA5BB22' }}>
                 <h3 className="text-xl font-bold mb-6" style={{ color: '#FAA5BB' }}>Contact Information</h3>
                 <div className="space-y-4">
@@ -201,27 +229,10 @@ function FuturisticTemplate({ portfolio, projects }) {
                       {contact.email}
                     </a>
                   )}
-                  {contact.linkedin && (
-                    <a
-                      href={contact.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-gray-800 hover:text-[#FAA5BB] transition-colors"
-                    >
-                      <FaLinkedin style={{ color: '#FAA5BB' }} />
-                      LinkedIn
-                    </a>
-                  )}
-                  {contact.github && (
-                    <a
-                      href={contact.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-gray-800 hover:text-[#FAA5BB] transition-colors"
-                    >
-                      <FaGithub style={{ color: '#FAA5BB' }} />
-                      GitHub
-                    </a>
+                  {contact.phone && (
+                    <span className="flex items-center gap-3 text-gray-800">
+                      Phone: {contact.phone}
+                    </span>
                   )}
                   {contact.website && (
                     <a
@@ -236,12 +247,12 @@ function FuturisticTemplate({ portfolio, projects }) {
                   )}
                 </div>
               </div>
-              <div className="bg-gray-100 rounded-2xl p-8 border" style={{ borderColor: '#FAA5BB22' }}>
-                <h3 className="text-xl font-bold mb-6" style={{ color: '#FAA5BB' }}>Location</h3>
-                {contact.location && (
+              {contact.location && (
+                <div className="bg-gray-100 rounded-2xl p-8 border" style={{ borderColor: '#FAA5BB22' }}>
+                  <h3 className="text-xl font-bold mb-6" style={{ color: '#FAA5BB' }}>Location</h3>
                   <p className="text-gray-800">{contact.location}</p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

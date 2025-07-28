@@ -66,7 +66,7 @@ function Login() {
     }
 
     if (!email.endsWith('@gmail.com')) {
-      toast.error('Please use valid email address');
+      toast.error('Please use valid Gmail address (must end with @gmail.com');
       return;
     }
 
@@ -125,7 +125,7 @@ function Login() {
     }
 
     if (!email.endsWith('@gmail.com')) {
-      toast.error('Please use valid email address');
+      toast.error('Please use valid Gmail address (must end with @gmail.com)');
       return;
     }
 

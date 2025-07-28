@@ -65,6 +65,23 @@ function ModernTemplate({ portfolio, projects }) {
         </div>
       </section>
 
+      {/* About Section */}
+      {(about.title || about.bio || (about.skills && about.skills.length > 0)) && (
+        <section className={`${spacing} bg-white`}>
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: customization.primaryColor }}>{about.title || 'About Me'}</h2>
+            {about.bio && <p className="text-lg text-gray-700 mb-4 text-center">{about.bio}</p>}
+            {about.skills && about.skills.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center mt-2">
+                {about.skills.map((skill, idx) => (
+                  <span key={idx} className="px-3 py-1 text-sm rounded-full bg-gray-100 border border-gray-200 text-gray-800">{skill}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* Projects Section */}
       <section ref={projectsRef} className={`${spacing} bg-white`}>
         <div className="container mx-auto px-4">

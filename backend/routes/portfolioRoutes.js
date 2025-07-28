@@ -5,9 +5,6 @@ const {
   createPortfolio,
   updatePortfolio,
   updateTheme,
-  addTestimonial,
-  updateTestimonial,
-  deleteTestimonial,
   updateCustomization,
   getPublicPortfolio,
 } = require('../controllers/portfolioController');
@@ -26,11 +23,5 @@ router.put('/:id', protect, updatePortfolio);
 
 router.put('/theme', protect, updateTheme);
 router.put('/customization', protect, updateCustomization);
-
-// Testimonial routes
-router.post('/testimonials', protect, addTestimonial);
-router.route('/testimonials/:id')
-  .put(protect, updateTestimonial)
-  .delete(protect, deleteTestimonial);
 
 module.exports = router; 

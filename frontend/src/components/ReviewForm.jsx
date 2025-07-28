@@ -7,10 +7,17 @@ function ReviewForm({ onReviewSubmitted }) {
 
   const handleChange = (e) => {
     setQuote(e.target.value);
+    // Clear error if under limit
+    if (e.target.value.trim().split(/\s+/).length <= 50) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const wordCount = quote.trim().split(/\s+/).length;
+    if (wordCount > 50) {
+      setError('Review cannot exceed 50 words.');
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const config = {
@@ -31,7 +38,7 @@ function ReviewForm({ onReviewSubmitted }) {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Write a Review</h2>
+      {/* <h2 className="text-2xl font-bold mb-4">Write a Review</h2> */}
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -47,6 +54,7 @@ function ReviewForm({ onReviewSubmitted }) {
             rows="4"
             required
           />
+          <div className="text-sm text-gray-500 mt-1">{quote.trim().split(/\s+/).filter(Boolean).length} / 50 words</div>
         </div>
         <button
           type="submit"

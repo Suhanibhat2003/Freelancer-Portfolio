@@ -1,23 +1,5 @@
 const mongoose = require('mongoose');
 
-const testimonialSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  position: String,
-  company: String,
-  content: {
-    type: String,
-    required: true,
-  },
-  rating: {
-    type: Number,
-    min: 1,
-    max: 5,
-  },
-});
-
 const experienceSchema = mongoose.Schema({
   title: {
     type: String,
@@ -138,7 +120,6 @@ const portfolioSchema = mongoose.Schema(
             default: 'to bottom'
           }
         },
-        image: String,
         overlay: {
           type: Boolean,
           default: true
@@ -165,8 +146,7 @@ const portfolioSchema = mongoose.Schema(
         default: 'About Me'
       },
       bio: String,
-      skills: [String],
-      image: String
+      skills: [String]
     },
     experience: [experienceSchema],
     certifications: [certificationSchema],
@@ -174,7 +154,7 @@ const portfolioSchema = mongoose.Schema(
       email: {
         type: String,
         required: true,
-        match: [/\S+@\S+\.\S+/, 'Valid email required']
+        match: [/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Valid Gmail address required (must end with @gmail.com)']
       },
       linkedin: {
         type: String,
@@ -216,15 +196,9 @@ const portfolioSchema = mongoose.Schema(
       enum: ['light', 'dark'],
       default: 'light',
     },
-    customDomain: String,
-    testimonials: [testimonialSchema],
     isPublic: {
       type: Boolean,
       default: true,
-    },
-    views: {
-      type: Number,
-      default: 0,
     },
     customization: {
       primaryColor: {

@@ -1,4 +1,7 @@
 import { FaRocket, FaLeaf, FaBriefcase, FaPalette, FaGem, FaBook, FaRobot, FaRegLightbulb, FaSpaceShuttle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const templates = [
   {
@@ -48,36 +51,36 @@ const templates = [
     id: 'minimal',
     name: 'Minimal',
     icon: <FaLeaf className="text-green-600 text-3xl mb-2" />,
-    description: 'Simple, lots of whitespace, left-aligned text, and soft cards.',
+    description: 'Clean, simple, and focused on content with minimal distractions.',
     preview: null,
     defaultValues: {
       hero: {
-        title: 'Hello, I\'m a Developer',
-        subtitle: 'Building digital experiences',
+        title: 'Welcome to My Portfolio',
+        subtitle: 'Full Stack Developer',
         background: {
           type: 'color',
           color: '#ffffff'
         },
-        ctaText: 'Explore Projects'
+        ctaText: 'View My Work'
       },
       customization: {
-        primaryColor: '#2D3748',
-        secondaryColor: '#4A5568',
+        primaryColor: '#4CAF50',
+        secondaryColor: '#2E7D32',
         fontFamily: 'Inter',
         layout: 'minimal',
-        spacing: 'compact'
+        spacing: 'comfortable'
       }
     },
     jsxPreview: (
-      <div className="rounded-lg overflow-hidden border shadow bg-white p-4 flex flex-col items-start">
-        <div className="w-12 h-12 rounded bg-green-100 flex items-center justify-center mb-2">
-          <FaLeaf className="text-green-600 text-2xl" />
+      <div className="rounded-lg overflow-hidden border shadow bg-white p-4 flex flex-col items-center">
+        <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-2">
+          <FaLeaf className="text-green-600 text-3xl" />
         </div>
-        <div className="w-2/3 h-4 bg-gray-200 rounded mb-2" />
-        <div className="w-1/2 h-3 bg-gray-100 rounded mb-4" />
-        <div className="flex flex-col gap-2 w-full">
-          <div className="h-6 bg-gray-100 rounded" />
-          <div className="h-6 bg-gray-100 rounded" />
+        <div className="w-full h-4 bg-gray-100 rounded mb-2" />
+        <div className="w-3/4 h-3 bg-gray-50 rounded mb-4" />
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <div className="h-8 bg-gray-50 rounded" />
+          <div className="h-8 bg-gray-50 rounded" />
         </div>
       </div>
     )
@@ -246,6 +249,27 @@ const templates = [
 ];
 
 function TemplateSelector({ onSelect, currentTemplate }) {
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+
+  const handleTemplateClick = async (templateValues, templateId) => {
+    // First update the template
+    await onSelect(templateValues, templateId);
+    
+    // Navigate to preview for all templates except creative (modern)
+    if (templateId !== 'modern') {
+      // Add a small delay to ensure the template is saved
+      setTimeout(() => {
+        navigate(`/preview/${user.username}`);
+      }, 100);
+    }
+  };
+
+  // Add this useEffect to scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
       {templates.map((template) => (
@@ -256,7 +280,7 @@ function TemplateSelector({ onSelect, currentTemplate }) {
               ? 'ring-4 ring-purple-400 border-purple-500'
               : 'border-gray-200 hover:border-purple-300'
           }`}
-          onClick={() => onSelect(template.defaultValues, template.id)}
+          onClick={() => handleTemplateClick(template.defaultValues, template.id)}
         >
           {template.icon}
           <h3 className="font-semibold text-lg mb-1 text-center">{template.name}</h3>

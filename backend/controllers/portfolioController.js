@@ -142,71 +142,6 @@ const updateTheme = asyncHandler(async (req, res) => {
   res.status(200).json(updatedPortfolio);
 });
 
-// @desc    Add testimonial
-// @route   POST /api/portfolios/testimonials
-// @access  Private
-const addTestimonial = asyncHandler(async (req, res) => {
-  const portfolio = await Portfolio.findOne({ user: req.user.id });
-
-  if (!portfolio) {
-    res.status(404);
-    throw new Error('Portfolio not found');
-  }
-
-  portfolio.testimonials.push(req.body);
-  const updatedPortfolio = await portfolio.save();
-
-  res.status(200).json(updatedPortfolio);
-});
-
-// @desc    Update testimonial
-// @route   PUT /api/portfolios/testimonials/:id
-// @access  Private
-const updateTestimonial = asyncHandler(async (req, res) => {
-  const portfolio = await Portfolio.findOne({ user: req.user.id });
-
-  if (!portfolio) {
-    res.status(404);
-    throw new Error('Portfolio not found');
-  }
-
-  const testimonialIndex = portfolio.testimonials.findIndex(
-    (t) => t._id.toString() === req.params.id
-  );
-
-  if (testimonialIndex === -1) {
-    res.status(404);
-    throw new Error('Testimonial not found');
-  }
-
-  portfolio.testimonials[testimonialIndex] = {
-    ...portfolio.testimonials[testimonialIndex],
-    ...req.body,
-  };
-
-  const updatedPortfolio = await portfolio.save();
-  res.status(200).json(updatedPortfolio);
-});
-
-// @desc    Delete testimonial
-// @route   DELETE /api/portfolios/testimonials/:id
-// @access  Private
-const deleteTestimonial = asyncHandler(async (req, res) => {
-  const portfolio = await Portfolio.findOne({ user: req.user.id });
-
-  if (!portfolio) {
-    res.status(404);
-    throw new Error('Portfolio not found');
-  }
-
-  portfolio.testimonials = portfolio.testimonials.filter(
-    (t) => t._id.toString() !== req.params.id
-  );
-
-  const updatedPortfolio = await portfolio.save();
-  res.status(200).json(updatedPortfolio);
-});
-
 // @desc    Update portfolio customization
 // @route   PUT /api/portfolios/customization
 // @access  Private
@@ -233,8 +168,5 @@ module.exports = {
   createPortfolio,
   updatePortfolio,
   updateTheme,
-  addTestimonial,
-  updateTestimonial,
-  deleteTestimonial,
   updateCustomization,
 }; 
